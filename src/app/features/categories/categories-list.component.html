@@ -1,0 +1,97 @@
+<p-toast />
+<p-confirmDialog />
+
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Categories</h1>
+      <p class="subtitle">Manage pet categories</p>
+    </div>
+    <div class="page-actions">
+      <p-button label="Add Category" icon="pi pi-plus" severity="primary"
+                (onClick)="openCreateDialog()" />
+    </div>
+  </div>
+
+  <p-card>
+    <p-table
+      [value]="categories()"
+      [loading]="loading()"
+      styleClass="p-datatable-sm"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 60px">ID</th>
+          <th>Name</th>
+          <th>Image</th>
+          <th style="width: 120px">Actions</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-cat>
+        <tr>
+          <td>{{ cat.id }}</td>
+          <td>
+            <span class="cat-name">{{ cat.name }}</span>
+          </td>
+          <td>
+            @if (cat.image_url) {
+              <img [src]="cat.image_url" [alt]="cat.name" class="cat-thumb" />
+            } @else {
+              <span class="no-image">No image</span>
+            }
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button pButton icon="pi pi-pencil" severity="info"
+                      [text]="true" [rounded]="true" size="small"
+                      pTooltip="Edit" tooltipPosition="top"
+                      (click)="openEditDialog(cat)"></button>
+              <button pButton icon="pi pi-trash" severity="danger"
+                      [text]="true" [rounded]="true" size="small"
+                      pTooltip="Delete" tooltipPosition="top"
+                      (click)="confirmDelete(cat)"></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="4">
+            <div class="empty-state">
+              <i class="pi pi-tags"></i>
+              <h3>No categories</h3>
+              <p>Create your first pet category</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>
+
+<!-- Create/Edit Dialog -->
+<p-dialog [header]="editingCategory() ? 'Edit Category' : 'New Category'"
+          [(visible)]="dialogVisible" [modal]="true" [style]="{ width: '420px' }">
+  <div class="form-field">
+    <label>Name *</label>
+    <input pInputText [(ngModel)]="formName" placeholder="Category name" class="w-full" />
+  </div>
+  <div class="form-field">
+    <label>Image URL</label>
+    <input pInputText [(ngModel)]="formImageUrl" placeholder="https://..." class="w-full" />
+  </div>
+  @if (formImageUrl) {
+    <div class="image-preview">
+      <img [src]="formImageUrl" alt="Preview" />
+    </div>
+  }
+  <ng-template pTemplate="footer">
+    <p-button label="Cancel" severity="secondary" [text]="true"
+              (onClick)="dialogVisible = false" />
+    <p-button [label]="editingCategory() ? 'Update' : 'Create'" icon="pi pi-check"
+              severity="primary" [disabled]="!formName.trim()"
+              (onClick)="save()" />
+  </ng-template>
+</p-dialog>

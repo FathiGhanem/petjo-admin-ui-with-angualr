@@ -1,0 +1,89 @@
+<p-toast />
+
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Reports</h1>
+      <p class="subtitle">Review content and behavior reports</p>
+    </div>
+  </div>
+
+  <p-card>
+    <p-table
+      [value]="reports()"
+      [loading]="loading()"
+      [paginator]="true"
+      [rows]="20"
+      [rowsPerPageOptions]="[10, 20, 50]"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} reports"
+      [globalFilterFields]="['reason', 'target_type']"
+      #dt
+      styleClass="p-datatable-sm"
+    >
+      <ng-template pTemplate="caption">
+        <div class="table-header">
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" placeholder="Search reports..."
+                   (input)="dt.filterGlobal($any($event.target).value, 'contains')" />
+          </span>
+          <span class="record-count">{{ reports().length }} reports</span>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 60px">ID</th>
+          <th pSortableColumn="target_type">Type <p-sortIcon field="target_type" /></th>
+          <th>Target ID</th>
+          <th>Reporter</th>
+          <th>Reported User</th>
+          <th>Reason</th>
+          <th pSortableColumn="created_at">Date <p-sortIcon field="created_at" /></th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-report>
+        <tr>
+          <td>{{ report.id }}</td>
+          <td>
+            <span class="status-badge" [class]="getTypeClass(report.target_type)">
+              <i [class]="getTypeIcon(report.target_type)" style="font-size: 0.7rem"></i>
+              {{ report.target_type }}
+            </span>
+          </td>
+          <td>{{ report.target_id }}</td>
+          <td>
+            <span class="id-cell" pTooltip="{{ report.reporter_id }}" tooltipPosition="top">
+              {{ report.reporter_id ? (report.reporter_id | slice:0:8) + '...' : '—' }}
+            </span>
+          </td>
+          <td>
+            <span class="id-cell" pTooltip="{{ report.reported_user_id }}" tooltipPosition="top">
+              {{ report.reported_user_id ? (report.reported_user_id | slice:0:8) + '...' : '—' }}
+            </span>
+          </td>
+          <td>
+            <span class="reason-text" pTooltip="{{ report.reason }}" tooltipPosition="top">
+              {{ report.reason | slice:0:60 }}{{ report.reason.length > 60 ? '...' : '' }}
+            </span>
+          </td>
+          <td>{{ report.created_at | date:'mediumDate' }}</td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7">
+            <div class="empty-state">
+              <i class="pi pi-flag"></i>
+              <h3>No reports</h3>
+              <p>No user reports have been submitted yet</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>

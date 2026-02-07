@@ -1,0 +1,356 @@
+/* ============================================================
+   Login Page – Split Panel with Animated Background
+   ============================================================ */
+
+.login-page {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ===== Left Panel – Animated Gradient ===== */
+.login-left {
+  flex: 1;
+  background: linear-gradient(135deg, #1a7a42 0%, #2E9457 30%, #3FAE6B 60%, #2DD4BF 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+
+  /* Animated dot grid */
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background-image:
+      radial-gradient(circle, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+    background-size: 32px 32px;
+    animation: gridDrift 25s linear infinite;
+  }
+
+  /* Floating orbs */
+  &::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent 60%);
+    border-radius: 50%;
+    animation: float 8s ease-in-out infinite;
+  }
+}
+
+@keyframes gridDrift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(32px, 32px); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-15px, 15px) scale(0.95); }
+}
+
+/* Brand */
+.brand-area {
+  text-align: center;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+  animation: fadeUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.brand-logo {
+  height: 120px;
+  width: auto;
+  margin-bottom: 1.5rem;
+  animation: fadeInScale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.2));
+  display: inline-block;
+
+  &:hover {
+    animation: gentlePulse 2s ease-in-out infinite;
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes gentlePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.brand-icon {
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+  animation: heartbeat 3s ease-in-out infinite;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.2));
+  display: block;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  5% { transform: scale(1.15); }
+  10% { transform: scale(1); }
+  15% { transform: scale(1.1); }
+  20% { transform: scale(1); }
+}
+
+.brand-title {
+  font-size: 3.5rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  letter-spacing: -1px;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.brand-subtitle {
+  font-size: 1.25rem;
+  font-weight: 400;
+  opacity: 0.9;
+  letter-spacing: 0.5px;
+}
+
+/* ===== Right Panel – Form ===== */
+.login-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  background: linear-gradient(160deg, #ffffff 0%, #f8fafc 100%);
+  position: relative;
+
+  /* Decorative circles */
+  &::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(63, 174, 107, 0.04), transparent 60%);
+    border-radius: 50%;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -10%;
+    left: -5%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(236, 72, 153, 0.03), transparent 60%);
+    border-radius: 50%;
+  }
+}
+
+/* Form wrapper – glass card */
+.login-form-wrapper {
+  width: 100%;
+  max-width: 440px;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.08),
+    0 0 1px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  position: relative;
+  z-index: 1;
+  animation: slideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Form Header */
+.form-header {
+  margin-bottom: 2.25rem;
+  text-align: center;
+}
+
+.form-header h2 {
+  font-size: 1.875rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #2E9457, #3FAE6B);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.03em;
+}
+
+.form-header p {
+  color: #64748b;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* Error Banner */
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.125rem;
+  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+  border: none;
+  border-left: 4px solid #ef4444;
+  border-radius: 12px;
+  color: #991b1b;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
+  animation: shakeIn 0.5s ease;
+
+  i {
+    font-size: 1.125rem;
+    flex-shrink: 0;
+  }
+}
+
+@keyframes shakeIn {
+  0%, 100% { transform: translateX(0); }
+  10%, 50%, 90% { transform: translateX(-4px); }
+  30%, 70% { transform: translateX(4px); }
+}
+
+/* Form Fields */
+.form-field {
+  margin-bottom: 1.375rem;
+
+  label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: #334155;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.3px;
+  }
+}
+
+.w-full {
+  width: 100%;
+}
+
+/* PrimeNG Overrides */
+:host ::ng-deep {
+  .login-btn {
+    margin-top: 0.5rem;
+    padding: 0.875rem !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    background: linear-gradient(135deg, #2E9457, #3FAE6B) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.3) !important;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), transparent);
+      pointer-events: none;
+    }
+
+    &:not(:disabled):hover {
+      box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4) !important;
+      transform: translateY(-2px);
+    }
+
+    &:not(:disabled):active {
+      transform: translateY(0) scale(0.98);
+    }
+  }
+
+  .p-password {
+    width: 100%;
+  }
+
+  .p-password input {
+    width: 100%;
+  }
+
+  .p-inputtext {
+    padding: 0.875rem 1rem !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    font-size: 0.9rem !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+
+    &:enabled:hover {
+      border-color: #cbd5e1 !important;
+    }
+
+    &:enabled:focus {
+      border-color: #3FAE6B !important;
+      box-shadow: 0 0 0 3px rgba(63, 174, 107, 0.1) !important;
+      background: #ffffff !important;
+    }
+  }
+
+  label {
+    font-weight: 600 !important;
+    color: #334155 !important;
+  }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .login-left {
+    display: none;
+  }
+
+  .login-right {
+    padding: 1.5rem;
+  }
+
+  .login-form-wrapper {
+    padding: 2rem;
+    border-radius: 20px;
+  }
+}

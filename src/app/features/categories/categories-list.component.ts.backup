@@ -1,0 +1,239 @@
+import { Component, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { TooltipModule } from 'primeng/tooltip';
+import { MessageService, ConfirmationService } from 'primeng/api';
+import { ApiService } from '../../core/services/api.service';
+import { Category } from '../../core/models';
+
+@Component({
+  selector: 'app-categories-list',
+  standalone: true,
+  imports: [
+    CommonModule, FormsModule, TableModule, ButtonModule, CardModule,
+    ToastModule, ConfirmDialogModule, DialogModule, InputTextModule, TooltipModule
+  ],
+  providers: [MessageService, ConfirmationService],
+  templateUrl: './categories-list.component.html',
+  styleUrls: ['./categories-list.component.scss']
+})
+export class CategoriesListComponent implements OnInit {
+  categories = signal<Category[]>([]);
+  loading = signal(false);
+      <div class="page-header">
+        <div>
+          <h1>Categories</h1>
+          <p class="subtitle">Manage pet categories</p>
+        </div>
+        <div class="page-actions">
+          <p-button label="Add Category" icon="pi pi-plus" severity="primary"
+                    (onClick)="openCreateDialog()" />
+        </div>
+      </div>
+
+      <p-card>
+        <p-table
+          [value]="categories()"
+          [loading]="loading()"
+          styleClass="p-datatable-sm"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 60px">ID</th>
+              <th>Name</th>
+              <th>Image</th>
+              <th style="width: 120px">Actions</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-cat>
+            <tr>
+              <td>{{ cat.id }}</td>
+              <td>
+                <span class="cat-name">{{ cat.name }}</span>
+              </td>
+              <td>
+                @if (cat.image_url) {
+                  <img [src]="cat.image_url" [alt]="cat.name" class="cat-thumb" />
+                } @else {
+                  <span class="no-image">No image</span>
+                }
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button pButton icon="pi pi-pencil" severity="info"
+                          [text]="true" [rounded]="true" size="small"
+                          pTooltip="Edit" tooltipPosition="top"
+                          (click)="openEditDialog(cat)"></button>
+                  <button pButton icon="pi pi-trash" severity="danger"
+                          [text]="true" [rounded]="true" size="small"
+                          pTooltip="Delete" tooltipPosition="top"
+                          (click)="confirmDelete(cat)"></button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="4">
+                <div class="empty-state">
+                  <i class="pi pi-tags"></i>
+                  <h3>No categories</h3>
+                  <p>Create your first pet category</p>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+
+    <!-- Create/Edit Dialog -->
+    <p-dialog [header]="editingCategory() ? 'Edit Category' : 'New Category'"
+              [(visible)]="dialogVisible" [modal]="true" [style]="{ width: '420px' }">
+      <div class="form-field">
+        <label>Name *</label>
+        <input pInputText [(ngModel)]="formName" placeholder="Category name" class="w-full" />
+      </div>
+      <div class="form-field">
+        <label>Image URL</label>
+        <input pInputText [(ngModel)]="formImageUrl" placeholder="https://..." class="w-full" />
+      </div>
+      @if (formImageUrl) {
+        <div class="image-preview">
+          <img [src]="formImageUrl" alt="Preview" />
+        </div>
+      }
+      <ng-template pTemplate="footer">
+        <p-button label="Cancel" severity="secondary" [text]="true"
+                  (onClick)="dialogVisible = false" />
+        <p-button [label]="editingCategory() ? 'Update' : 'Create'" icon="pi pi-check"
+                  severity="primary" [disabled]="!formName.trim()"
+                  (onClick)="save()" />
+
+      font-weight: 500;
+    }
+
+    .cat-thumb {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .no-image {
+      color: #94a3b8;
+      font-size: 0.85rem;
+    }
+
+    .image-preview {
+      margin-top: 0.5rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+      max-height: 120px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+  formImageUrl = '';
+
+  constructor(
+    private readonly api: ApiService,
+    private readonly msg: MessageService,
+    private readonly confirm: ConfirmationService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadCategories();
+  }
+
+  loadCategories(): void {
+    this.loading.set(true);
+    this.api.getCategories().subscribe({
+      next: (res) => {
+        this.categories.set(res.data);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.msg.add({ severity: 'error', summary: 'Error', detail: 'Failed to load categories' });
+        this.loading.set(false);
+      }
+    });
+  }
+
+  openCreateDialog(): void {
+    this.editingCategory.set(null);
+    this.formName = '';
+    this.formImageUrl = '';
+    this.dialogVisible = true;
+  }
+
+  openEditDialog(cat: Category): void {
+    this.editingCategory.set(cat);
+    this.formName = cat.name;
+    this.formImageUrl = cat.image_url || '';
+    this.dialogVisible = true;
+  }
+
+  save(): void {
+    if (!this.formName.trim()) return;
+
+    const data = {
+      name: this.formName.trim(),
+      image_url: this.formImageUrl.trim() || undefined
+    };
+
+    const editing = this.editingCategory();
+
+    const op$ = editing
+      ? this.api.updateCategory(editing.id, data)
+      : this.api.createCategory(data as any);
+
+    op$.subscribe({
+      next: () => {
+        this.dialogVisible = false;
+        this.msg.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: editing ? 'Category updated' : 'Category created'
+        });
+        this.loadCategories();
+      },
+      error: (err) => this.msg.add({
+        severity: 'error', summary: 'Error',
+        detail: err.error?.detail || 'Operation failed'
+      })
+    });
+  }
+
+  confirmDelete(cat: Category): void {
+    this.confirm.confirm({
+      message: `Delete category "${cat.name}"? This will fail if pets are using it.`,
+      header: 'Delete Category',
+      icon: 'pi pi-exclamation-triangle',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        this.api.deleteCategory(cat.id).subscribe({
+          next: () => {
+            this.msg.add({ severity: 'success', summary: 'Success', detail: 'Category deleted' });
+            this.loadCategories();
+          },
+          error: (err) => this.msg.add({
+            severity: 'error', summary: 'Error',
+            detail: err.error?.detail || 'Failed to delete category'
+          })
+        });
+      }
+    });
+  }
+}

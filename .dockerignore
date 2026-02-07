@@ -1,0 +1,32 @@
+# Dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Build outputs
+dist
+.angular
+.vscode
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Testing
+coverage
+*.spec.ts
+
+# IDE
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore

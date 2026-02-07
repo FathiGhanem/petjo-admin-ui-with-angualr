@@ -1,0 +1,228 @@
+/* ============================================================
+   Dashboard Overview – Stat Cards Grid
+   ============================================================ */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.25rem;
+}
+
+/* ===== Stat Card ===== */
+.stat-card {
+  display: block;
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  border-radius: 16px;
+  padding: 1.75rem;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 0 1px rgba(0, 0, 0, 0.06);
+
+  /* Top accent line */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--primary-gradient, linear-gradient(135deg, #3FAE6B, #2DD4BF));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Ambient glow on hover */
+  &::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    right: -100%;
+    width: 300%;
+    height: 300%;
+    background: radial-gradient(circle, rgba(63, 174, 107, 0.02), transparent 50%);
+    transform: scale(0);
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &:hover {
+    border-color: rgba(63, 174, 107, 0.2);
+    box-shadow:
+      0 16px 40px rgba(63, 174, 107, 0.1),
+      0 0 1px rgba(0, 0, 0, 0.06),
+      0 0 20px rgba(63, 174, 107, 0.06);
+    transform: translateY(-4px);
+
+    &::before {
+      opacity: 1;
+    }
+
+    &::after {
+      transform: scale(1);
+    }
+
+    .stat-icon-wrapper {
+      transform: scale(1.08);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .stat-arrow {
+      transform: translateX(3px);
+      color: var(--primary);
+    }
+  }
+}
+
+/* Card inner layout */
+.stat-card-inner {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Icon wrapper */
+.stat-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+
+  /* Soft glow behind icon */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 18px;
+    background: inherit;
+    opacity: 0.25;
+    filter: blur(10px);
+    z-index: -1;
+  }
+
+  i {
+    font-size: 1.5rem;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  }
+}
+
+/* Content */
+.stat-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #94a3b8;
+  margin-bottom: 0.375rem;
+}
+
+.stat-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+
+/* Mini detail badges */
+.stat-details {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.stat-detail {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.25rem 0.625rem;
+  border-radius: 6px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid transparent;
+
+  &:hover {
+    transform: translateY(-1px) scale(1.05);
+  }
+
+  &.success {
+    background: #ecfdf5;
+    color: #047857;
+    border-color: rgba(16, 185, 129, 0.15);
+  }
+
+  &.danger {
+    background: #fef2f2;
+    color: #b91c1c;
+    border-color: rgba(239, 68, 68, 0.15);
+  }
+
+  &.warning {
+    background: #fffbeb;
+    color: #92400e;
+    border-color: rgba(245, 158, 11, 0.15);
+  }
+
+  &.info {
+    background: #eff6ff;
+    color: #1e40af;
+    border-color: rgba(59, 130, 246, 0.15);
+  }
+}
+
+/* Arrow indicator */
+.stat-arrow {
+  color: #cbd5e1;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+/* Skeleton */
+.stat-card-skeleton {
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 400% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  height: 120px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    padding: 1.25rem;
+  }
+
+  .stat-value {
+    font-size: 1.75rem;
+  }
+}

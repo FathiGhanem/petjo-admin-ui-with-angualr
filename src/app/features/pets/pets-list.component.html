@@ -1,0 +1,157 @@
+<p-toast />
+<p-confirmDialog />
+
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Pets</h1>
+      <p class="subtitle">Manage all pet listings</p>
+    </div>
+    <div class="page-actions">
+      <div class="filter-group">
+        <p-select [options]="statusOptions" [(ngModel)]="selectedStatus"
+                  placeholder="All Statuses" [showClear]="true"
+                  (onChange)="loadPets()" styleClass="filter-select" />
+        <label class="include-deleted">
+          <p-toggleSwitch [(ngModel)]="includeDeleted" (onChange)="loadPets()" />
+          <span>Show deleted</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <p-card>
+    <p-table
+      [value]="pets()"
+      [loading]="loading()"
+      [paginator]="true"
+      [rows]="20"
+      [rowsPerPageOptions]="[10, 20, 50, 100]"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} pets"
+      [globalFilterFields]="['name', 'breed', 'description']"
+      #dt
+      styleClass="p-datatable-sm"
+    >
+      <ng-template pTemplate="caption">
+        <div class="table-header">
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" placeholder="Search pets..."
+                   (input)="dt.filterGlobal($any($event.target).value, 'contains')" />
+          </span>
+          <span class="record-count">{{ pets().length }} pets</span>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="name">Name <p-sortIcon field="name" /></th>
+          <th>Breed</th>
+          <th>Age</th>
+          <th>Gender</th>
+          <th pSortableColumn="status">Status <p-sortIcon field="status" /></th>
+          <th>Visibility</th>
+          <th>Health</th>
+          <th pSortableColumn="created_at">Created <p-sortIcon field="created_at" /></th>
+          <th style="width: 160px">Actions</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-pet>
+        <tr [class.deleted-row]="pet.deleted_at">
+          <td>
+            <div class="pet-name-cell">
+              @if (pet.main_photo_url) {
+                <img [src]="pet.main_photo_url" [alt]="pet.name" class="pet-thumb" />
+              } @else {
+                <div class="pet-thumb-placeholder">
+                  <i class="pi pi-image"></i>
+                </div>
+              }
+              <span>{{ pet.name }}</span>
+            </div>
+          </td>
+          <td>{{ pet.breed || '—' }}</td>
+          <td>{{ pet.age != null ? pet.age : '—' }}</td>
+          <td>{{ pet.gender || '—' }}</td>
+          <td>
+            <span class="status-badge" [class]="getStatusClass(pet.status)">
+              {{ pet.status }}
+            </span>
+          </td>
+          <td>
+            <span class="status-badge" [class]="pet.visibility === 'public' ? 'info' : 'neutral'">
+              {{ pet.visibility }}
+            </span>
+          </td>
+          <td>
+            <div class="health-icons">
+              @if (pet.vaccinated) {
+                <i class="pi pi-check-circle" style="color: #10b981" pTooltip="Vaccinated"></i>
+              }
+              @if (pet.spayed) {
+                <i class="pi pi-check-circle" style="color: #3b82f6" pTooltip="Spayed/Neutered"></i>
+              }
+              @if (!pet.vaccinated && !pet.spayed) {
+                <span style="color: #94a3b8">—</span>
+              }
+            </div>
+          </td>
+          <td>{{ pet.created_at | date:'mediumDate' }}</td>
+          <td>
+            <div class="action-buttons">
+              <button pButton icon="pi pi-pencil" severity="info"
+                      [text]="true" [rounded]="true" size="small"
+                      pTooltip="Change Status" tooltipPosition="top"
+                      (click)="openStatusDialog(pet)"></button>
+              @if (!pet.deleted_at) {
+                <button pButton icon="pi pi-trash" severity="warn"
+                        [text]="true" [rounded]="true" size="small"
+                        pTooltip="Soft Delete" tooltipPosition="top"
+                        (click)="confirmDelete(pet, false)"></button>
+              }
+              <button pButton icon="pi pi-times" severity="danger"
+                      [text]="true" [rounded]="true" size="small"
+                      pTooltip="Permanent Delete" tooltipPosition="top"
+                      (click)="confirmDelete(pet, true)"></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="9">
+            <div class="empty-state">
+              <i class="pi pi-heart"></i>
+              <h3>No pets found</h3>
+              <p>No pet listings match your current filters</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>
+
+<!-- Status Change Dialog -->
+<p-dialog header="Change Pet Status" [(visible)]="statusDialogVisible"
+          [modal]="true" [style]="{ width: '400px' }">
+  @if (selectedPet()) {
+    <div class="form-field">
+      <label>Current Status: <strong>{{ selectedPet()!.status }}</strong></label>
+    </div>
+    <div class="form-field">
+      <label>New Status</label>
+      <p-select [options]="petStatusOptions" [(ngModel)]="newStatus"
+                placeholder="Select status" styleClass="w-full" />
+    </div>
+  }
+  <ng-template pTemplate="footer">
+    <p-button label="Cancel" severity="secondary" [text]="true"
+              (onClick)="statusDialogVisible = false" />
+    <p-button label="Update" icon="pi pi-check" severity="primary"
+              [disabled]="!newStatus" (onClick)="updateStatus()" />
+  </ng-template>
+</p-dialog>

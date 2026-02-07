@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  petjo-admin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: petjo-admin
+    ports:
+      - "4200:80"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    networks:
+      - petjo-network
+
+networks:
+  petjo-network:
+    external: true

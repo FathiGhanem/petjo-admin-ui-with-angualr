@@ -1,0 +1,61 @@
+<p-toast />
+<div class="login-page">
+  <div class="login-left">
+    <div class="brand-area">
+      <img src="assets/images/petJoLogo.svg" alt="PetJo Logo" class="brand-logo">
+      <h1>PetJo Admin</h1>
+      <p>Manage your pet platform with ease.</p>
+    </div>
+  </div>
+
+  <div class="login-right">
+    <div class="login-form-wrapper">
+      <div class="form-header">
+        <h2>Welcome Back</h2>
+        <p>Sign in to your admin dashboard</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-field">
+          <label for="email">Email Address</label>
+          <input pInputText
+                 id="email"
+                 formControlName="email"
+                 type="email"
+                 placeholder="admin&#64;petjo.com"
+                 class="w-full" />
+          @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+            <small class="p-error">Please enter a valid email address</small>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="password">Password</label>
+          <p-password formControlName="password"
+                      [feedback]="false"
+                      [toggleMask]="true"
+                      placeholder="Enter your password"
+                      styleClass="w-full"
+                      inputStyleClass="w-full" />
+          @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+            <small class="p-error">Password is required</small>
+          }
+        </div>
+
+        @if (errorMessage()) {
+          <div class="error-banner">
+            <i class="pi pi-exclamation-circle"></i>
+            <span>{{ errorMessage() }}</span>
+          </div>
+        }
+
+        <p-button type="submit"
+                  label="Sign In"
+                  icon="pi pi-sign-in"
+                  [loading]="loading()"
+                  [disabled]="loginForm.invalid"
+                  styleClass="w-full login-btn" />
+      </form>
+    </div>
+  </div>
+</div>

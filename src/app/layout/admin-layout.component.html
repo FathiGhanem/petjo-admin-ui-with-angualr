@@ -1,0 +1,63 @@
+<div class="layout-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.collapsed]="collapsed()">
+    <div class="sidebar-brand">
+      @if (!collapsed()) {
+        <div class="brand-full">
+          <img src="assets/images/petJoLogo.svg" alt="PetJo Logo" class="brand-logo">
+          <span class="brand-text">PetJo Admin</span>
+        </div>
+      } @else {
+        <div class="brand-collapsed">
+          <img src="assets/images/petJoLogo.svg" alt="PetJo Logo" class="brand-logo-small">
+        </div>
+      }
+    </div>
+
+    <nav class="sidebar-nav">
+      @for (item of navItems; track item.route) {
+        <a [routerLink]="item.route"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+           class="nav-link"
+           [pTooltip]="collapsed() ? item.label : ''"
+           tooltipPosition="right">
+          <i [class]="item.icon"></i>
+          @if (!collapsed()) {
+            <span class="nav-text">{{ item.label }}</span>
+          }
+        </a>
+      }
+    </nav>
+
+    <div class="sidebar-footer">
+      <a class="nav-link logout-link" (click)="onLogout()">
+        <i class="pi pi-sign-out"></i>
+        @if (!collapsed()) {
+          <span class="nav-text">Logout</span>
+        }
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-area">
+    <header class="topbar">
+      <button pButton
+              [icon]="collapsed() ? 'pi pi-bars' : 'pi pi-times'"
+              class="p-button-text p-button-rounded p-button-plain toggle-btn"
+              (click)="toggleSidebar()">
+      </button>
+
+      <div class="topbar-right">
+        <p-avatar [label]="userInitials()" shape="circle" size="normal"
+                  [style]="{ 'background-color': '#6366f1', 'color': '#fff' }">
+        </p-avatar>
+      </div>
+    </header>
+
+    <main class="content-area">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

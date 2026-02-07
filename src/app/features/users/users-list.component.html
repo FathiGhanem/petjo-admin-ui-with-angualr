@@ -1,0 +1,106 @@
+<p-toast />
+<p-confirmDialog />
+
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Users</h1>
+      <p class="subtitle">Manage all registered users</p>
+    </div>
+  </div>
+
+  <p-card>
+    <p-table
+      [value]="users()"
+      [loading]="loading()"
+      [paginator]="true"
+      [rows]="20"
+      [rowsPerPageOptions]="[10, 20, 50, 100]"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
+      [globalFilterFields]="['email', 'full_name', 'city']"
+      #dt
+      styleClass="p-datatable-sm"
+    >
+      <ng-template pTemplate="caption">
+        <div class="table-header">
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" placeholder="Search users..."
+                   (input)="dt.filterGlobal($any($event.target).value, 'contains')" />
+          </span>
+          <span class="user-count">{{ users().length }} total</span>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="email">Email <p-sortIcon field="email" /></th>
+          <th pSortableColumn="full_name">Name <p-sortIcon field="full_name" /></th>
+          <th>Phone</th>
+          <th>City</th>
+          <th pSortableColumn="is_active">Status <p-sortIcon field="is_active" /></th>
+          <th pSortableColumn="created_at">Joined <p-sortIcon field="created_at" /></th>
+          <th style="width: 120px">Actions</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-user>
+        <tr>
+          <td>
+            <div class="user-email">
+              <span>{{ user.email }}</span>
+              @if (user.is_superuser) {
+                <p-tag value="Admin" severity="secondary" [rounded]="true" />
+              }
+            </div>
+          </td>
+          <td>{{ user.full_name || '—' }}</td>
+          <td>{{ user.phone || '—' }}</td>
+          <td>{{ user.city || '—' }}</td>
+          <td>
+            <span class="status-badge" [class]="user.is_active ? 'success' : 'danger'">
+              <i [class]="user.is_active ? 'pi pi-check-circle' : 'pi pi-times-circle'"
+                 style="font-size: 0.7rem"></i>
+              {{ user.is_active ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td>{{ user.created_at | date:'mediumDate' }}</td>
+          <td>
+            <div class="action-buttons">
+              @if (user.is_active) {
+                <button pButton icon="pi pi-ban" severity="warn"
+                        [text]="true" [rounded]="true" size="small"
+                        pTooltip="Deactivate" tooltipPosition="top"
+                        (click)="confirmDeactivate(user)"></button>
+              } @else {
+                <button pButton icon="pi pi-check" severity="success"
+                        [text]="true" [rounded]="true" size="small"
+                        pTooltip="Activate" tooltipPosition="top"
+                        (click)="activateUser(user)"></button>
+              }
+              @if (!user.is_superuser) {
+                <button pButton icon="pi pi-trash" severity="danger"
+                        [text]="true" [rounded]="true" size="small"
+                        pTooltip="Delete" tooltipPosition="top"
+                        (click)="confirmDelete(user)"></button>
+              }
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7">
+            <div class="empty-state">
+              <i class="pi pi-users"></i>
+              <h3>No users found</h3>
+              <p>No registered users match your search criteria</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>

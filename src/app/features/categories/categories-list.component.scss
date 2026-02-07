@@ -1,0 +1,132 @@
+/* ============================================================
+   Categories List – Premium Component Styles
+   ============================================================ */
+
+:host {
+  display: block;
+  animation: fadeIn 0.5s var(--ease-spring);
+}
+
+/* ---------- Category name ---------- */
+.cat-name {
+  font-weight: 600;
+  color: var(--text-color);
+  letter-spacing: 0.01em;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--primary);
+  }
+}
+
+/* ---------- Category thumbnail ---------- */
+.cat-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  border: 2px solid transparent;
+  background: linear-gradient(var(--surface-card), var(--surface-card)) padding-box,
+              var(--primary-gradient) border-box;
+  transition: all 0.3s var(--ease-spring);
+  box-shadow: var(--shadow-xs);
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.25) rotate(3deg);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+.no-image {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+  background: var(--surface-hover);
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed var(--surface-border);
+}
+
+/* ---------- Image preview in dialog ---------- */
+.image-preview {
+  margin-top: 0.75rem;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--surface-border);
+  background: linear-gradient(135deg,
+    rgba(var(--primary-rgb), 0.03),
+    rgba(var(--accent-rgb), 0.03));
+  padding: 12px;
+
+  img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+    display: block;
+  }
+}
+
+/* ---------- Form field ---------- */
+.form-field {
+  margin-bottom: 1.25rem;
+
+  label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-color-secondary);
+    margin-bottom: 6px;
+    letter-spacing: 0.02em;
+  }
+}
+
+/* ---------- Action buttons ---------- */
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  button {
+    transition: all 0.25s var(--ease-spring) !important;
+
+    &:hover {
+      transform: scale(1.15) !important;
+    }
+  }
+}
+
+/* ---------- Empty state ---------- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  animation: fadeIn 0.6s var(--ease-spring);
+
+  i {
+    font-size: 3.5rem;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 4px 12px rgba(var(--primary-rgb), 0.2));
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0 0 0.5rem;
+  }
+
+  p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+}

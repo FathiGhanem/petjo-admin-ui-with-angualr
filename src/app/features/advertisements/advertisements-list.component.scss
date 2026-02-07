@@ -1,0 +1,286 @@
+/* ============================================================
+   Advertisements List – Premium Component Styles
+   ============================================================ */
+
+:host {
+  display: block;
+  animation: fadeIn 0.5s var(--ease-spring);
+}
+
+/* ---------- Tab navigation ---------- */
+.tabs-wrapper {
+  margin-bottom: 1.5rem;
+}
+
+.tab-buttons {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: rgba(var(--primary-rgb), 0.04);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--surface-border);
+  width: fit-content;
+}
+
+.tab-btn {
+  position: relative;
+  padding: 10px 22px;
+  border: none;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  color: var(--text-color-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-spring);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.01em;
+
+  &:hover:not(.active) {
+    background: rgba(var(--primary-rgb), 0.06);
+    color: var(--text-color);
+  }
+
+  &.active {
+    background: #fff;
+    color: var(--primary);
+    box-shadow: var(--shadow-sm),
+                0 0 0 1px rgba(var(--primary-rgb), 0.08);
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 24px;
+      height: 2px;
+      background: var(--primary-gradient);
+      border-radius: 2px;
+    }
+  }
+}
+
+.tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--danger), #f97316);
+  color: #fff;
+  line-height: 1;
+  box-shadow: 0 2px 8px rgba(var(--danger-rgb), 0.35);
+  animation: pulse 2s infinite;
+}
+
+/* ---------- Table header ---------- */
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  .p-input-icon-left {
+    position: relative;
+
+    i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      z-index: 1;
+      transition: color 0.3s ease;
+    }
+
+    input {
+      padding-left: 40px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--surface-border);
+      background: var(--surface-hover);
+      transition: all 0.3s var(--ease-spring);
+      min-width: 280px;
+      height: 42px;
+
+      &:hover {
+        border-color: rgba(var(--primary-rgb), 0.3);
+        background: #fff;
+      }
+
+      &:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.12),
+                    var(--shadow-sm);
+        background: #fff;
+      }
+    }
+  }
+}
+
+/* ---------- Ad cells ---------- */
+.ad-title {
+  font-weight: 600;
+  color: var(--text-color);
+  max-width: 200px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: help;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--primary);
+  }
+}
+
+.ad-desc {
+  font-size: 0.83rem;
+  color: var(--text-color-secondary);
+  line-height: 1.5;
+  max-width: 250px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---------- Review dialog info ---------- */
+.review-ad-info {
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg,
+    rgba(var(--primary-rgb), 0.04),
+    rgba(var(--accent-rgb), 0.04));
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(var(--primary-rgb), 0.1);
+  margin-bottom: 1.25rem;
+
+  h4 {
+    margin: 0 0 0.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    font-size: 1rem;
+  }
+
+  p {
+    margin: 0;
+    color: var(--text-color-secondary);
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+}
+
+/* ---------- Ad detail dialog ---------- */
+.ad-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.detail-row {
+  display: flex;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--surface-border);
+  transition: background 0.2s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: rgba(var(--primary-rgb), 0.02);
+    margin: 0 -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: var(--radius-sm);
+  }
+}
+
+.detail-label {
+  min-width: 130px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.detail-value {
+  flex: 1;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+/* ---------- Form field ---------- */
+.form-field {
+  margin-bottom: 1.25rem;
+
+  label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-color-secondary);
+    margin-bottom: 6px;
+    letter-spacing: 0.02em;
+  }
+}
+
+/* ---------- Action buttons ---------- */
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  button {
+    transition: all 0.25s var(--ease-spring) !important;
+
+    &:hover {
+      transform: scale(1.15) !important;
+    }
+  }
+}
+
+/* ---------- Empty state ---------- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  animation: fadeIn 0.6s var(--ease-spring);
+
+  i {
+    font-size: 3.5rem;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 4px 12px rgba(var(--primary-rgb), 0.2));
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0 0 0.5rem;
+  }
+
+  p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+}
