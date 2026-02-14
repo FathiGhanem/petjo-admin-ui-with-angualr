@@ -101,6 +101,11 @@
           <td>{{ pet.created_at | date:'mediumDate' }}</td>
           <td>
             <div class="action-buttons">
+              <a [routerLink]="['/pets', pet.id]">
+                <button pButton icon="pi pi-eye" severity="primary"
+                        [text]="true" [rounded]="true" size="small"
+                        pTooltip="View Details" tooltipPosition="top"></button>
+              </a>
               <button pButton icon="pi pi-pencil" severity="info"
                       [text]="true" [rounded]="true" size="small"
                       pTooltip="Change Status" tooltipPosition="top"

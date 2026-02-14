@@ -137,6 +137,15 @@ export interface HeroCreate {
   link?: string;
 }
 
+// ===== Pet Photo =====
+
+export interface PetPhoto {
+  id: number;
+  pet_id: string;
+  url: string;
+  created_at: string;
+}
+
 // ===== Report =====
 
 export type ReportTargetType = 'pet' | 'advertisement' | 'profile';

@@ -202,7 +202,6 @@ img {
   &:hover {
     box-shadow: var(--shadow-lg), var(--shadow-glow) !important;
     border-color: rgba(var(--primary-rgb), 0.15) !important;
-    transform: translateY(-2px);
   }
 }
 

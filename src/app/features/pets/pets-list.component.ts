@@ -1,6 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
@@ -20,7 +21,7 @@ import { Pet, PetStatus } from '../../core/models';
   selector: 'app-pets-list',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, TableModule, ButtonModule, TagModule, CardModule,
+    CommonModule, FormsModule, RouterModule, TableModule, ButtonModule, TagModule, CardModule,
     ToastModule, ConfirmDialogModule, SelectModule, InputTextModule,
     TooltipModule, ToggleSwitchModule, DialogModule, DatePipe
   ],

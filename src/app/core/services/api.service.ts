@@ -7,6 +7,7 @@ import {
   PaginatedResponse,
   User,
   Pet,
+  PetPhoto,
   Advertisement,
   AdvertisementReview,
   Category,
@@ -81,6 +82,20 @@ export class ApiService {
     return this.http.delete<ApiResponse<unknown>>(
       `${this.api}/admin/pets/${petId}`, { params }
     );
+  }
+
+  getPet(petId: string): Observable<ApiResponse<Pet>> {
+    return this.http.get<ApiResponse<Pet>>(`${this.api}/pets/${petId}`);
+  }
+
+  getPetPhotos(petId: string): Observable<ApiResponse<PetPhoto[]>> {
+    return this.http.get<ApiResponse<PetPhoto[]>>(`${this.api}/pets/${petId}/photos`);
+  }
+
+  // ==================== USERS ====================
+
+  getUserById(userId: string): Observable<User> {
+    return this.http.get<User>(`${this.api}/users/${userId}`);
   }
 
   // ==================== ADVERTISEMENTS ====================

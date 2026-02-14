@@ -4,6 +4,10 @@
       <h1>Dashboard</h1>
       <p class="subtitle">Welcome to PetJo Admin Panel</p>
     </div>
+    <div class="page-actions">
+      <p-button label="Refresh" icon="pi pi-refresh" severity="secondary"
+                [text]="true" (onClick)="loadStats()" [loading]="loading()" />
+    </div>
   </div>
 
   @if (loading()) {
@@ -12,6 +16,11 @@
         <div class="stat-card-skeleton">
           <p-skeleton width="100%" height="140px" borderRadius="12px" />
         </div>
+      }
+    </div>
+    <div class="charts-grid" style="margin-top: 1.5rem;">
+      @for (i of [1,2,3,4]; track i) {
+        <p-skeleton width="100%" height="320px" borderRadius="16px" />
       }
     </div>
   } @else if (error()) {
@@ -25,6 +34,7 @@
       </div>
     </p-card>
   } @else {
+    <!-- Stat Cards -->
     <div class="stats-grid">
       @for (card of statCards(); track card.label) {
         <a [routerLink]="card.route" class="stat-card">
@@ -49,6 +59,250 @@
           </div>
         </a>
       }
+    </div>
+
+    <!-- KPI Metrics Row -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background: linear-gradient(135deg, #10b981, #14b8a6)">
+          <i class="pi pi-percentage"></i>
+        </div>
+        <div class="kpi-info">
+          <span class="kpi-value">{{ adoptionRate() }}%</span>
+          <span class="kpi-label">Adoption Rate</span>
+        </div>
+        <div class="kpi-bar">
+          <div class="kpi-bar-fill success" [style.width.%]="adoptionRate()"></div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background: linear-gradient(135deg, #6366f1, #8b5cf6)">
+          <i class="pi pi-check-circle"></i>
+        </div>
+        <div class="kpi-info">
+          <span class="kpi-value">{{ activeUserRate() }}%</span>
+          <span class="kpi-label">Active Users</span>
+        </div>
+        <div class="kpi-bar">
+          <div class="kpi-bar-fill primary" [style.width.%]="activeUserRate()"></div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background: linear-gradient(135deg, #3b82f6, #06b6d4)">
+          <i class="pi pi-thumbs-up"></i>
+        </div>
+        <div class="kpi-info">
+          <span class="kpi-value">{{ adApprovalRate() }}%</span>
+          <span class="kpi-label">Ad Approval Rate</span>
+        </div>
+        <div class="kpi-bar">
+          <div class="kpi-bar-fill info" [style.width.%]="adApprovalRate()"></div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background: linear-gradient(135deg, #ec4899, #f43f5e)">
+          <i class="pi pi-shield"></i>
+        </div>
+        <div class="kpi-info">
+          <span class="kpi-value">{{ vaccinationRate() }}%</span>
+          <span class="kpi-label">Vaccination Rate</span>
+        </div>
+        <div class="kpi-bar">
+          <div class="kpi-bar-fill pink" [style.width.%]="vaccinationRate()"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-header">
+          <div class="chart-title">
+            <i class="pi pi-heart"></i>
+            <span>Pet Status Distribution</span>
+          </div>
+        </div>
+        <div class="chart-body">
+          @if (petStatusChartData()) {
+            <p-chart type="doughnut" [data]="petStatusChartData()" [options]="petStatusChartOptions()"
+                     [style]="{ width: '100%', height: '260px' }" />
+          }
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <div class="chart-title">
+            <i class="pi pi-megaphone"></i>
+            <span>Advertisement Status</span>
+          </div>
+        </div>
+        <div class="chart-body">
+          @if (adStatusChartData()) {
+            <p-chart type="doughnut" [data]="adStatusChartData()" [options]="adStatusChartOptions()"
+                     [style]="{ width: '100%', height: '260px' }" />
+          }
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <div class="chart-title">
+            <i class="pi pi-users"></i>
+            <span>User Activity</span>
+          </div>
+        </div>
+        <div class="chart-body">
+          @if (userChartData()) {
+            <p-chart type="bar" [data]="userChartData()" [options]="userChartOptions()"
+                     [style]="{ width: '100%', height: '260px' }" />
+          }
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <div class="chart-title">
+            <i class="pi pi-venus"></i>
+            <span>Pet Gender Distribution</span>
+          </div>
+        </div>
+        <div class="chart-body">
+          @if (petGenderChartData()) {
+            <p-chart type="doughnut" [data]="petGenderChartData()" [options]="petGenderChartOptions()"
+                     [style]="{ width: '100%', height: '260px' }" />
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity Section -->
+    <div class="activity-grid">
+      <!-- Recent Pets -->
+      <div class="activity-card">
+        <div class="activity-header">
+          <div class="chart-title">
+            <i class="pi pi-heart"></i>
+            <span>Recent Pet Listings</span>
+          </div>
+          <a routerLink="/pets" class="view-all-link">
+            View All <i class="pi pi-arrow-right"></i>
+          </a>
+        </div>
+        <div class="activity-body">
+          @if (recentPets().length) {
+            <div class="activity-list">
+              @for (pet of recentPets(); track pet.id) {
+                <a [routerLink]="['/pets', pet.id]" class="activity-item">
+                  <div class="activity-avatar">
+                    @if (pet.main_photo_url) {
+                      <img [src]="pet.main_photo_url" [alt]="pet.name" />
+                    } @else {
+                      <div class="avatar-placeholder">
+                        <i class="pi pi-heart"></i>
+                      </div>
+                    }
+                  </div>
+                  <div class="activity-info">
+                    <span class="activity-name">{{ pet.name }}</span>
+                    <span class="activity-meta">{{ pet.breed || 'Unknown breed' }} · {{ pet.gender || '?' }}</span>
+                  </div>
+                  <div class="activity-end">
+                    <span class="status-badge" [class]="getStatusClass(pet.status)">{{ pet.status }}</span>
+                    <span class="activity-date">{{ pet.created_at | date:'shortDate' }}</span>
+                  </div>
+                </a>
+              }
+            </div>
+          } @else {
+            <div class="empty-state-sm">
+              <i class="pi pi-heart"></i>
+              <p>No pets yet</p>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="activity-right">
+        <!-- Pending Ads -->
+        <div class="activity-card">
+          <div class="activity-header">
+            <div class="chart-title">
+              <i class="pi pi-megaphone"></i>
+              <span>Pending Advertisements</span>
+            </div>
+            <a routerLink="/advertisements" class="view-all-link">
+              View All <i class="pi pi-arrow-right"></i>
+            </a>
+          </div>
+          <div class="activity-body">
+            @if (pendingAds().length) {
+              <div class="activity-list">
+                @for (ad of pendingAds(); track ad.id) {
+                  <div class="activity-item">
+                    <div class="activity-avatar ad-avatar">
+                      <i class="pi pi-megaphone"></i>
+                    </div>
+                    <div class="activity-info">
+                      <span class="activity-name">{{ ad.title }}</span>
+                      <span class="activity-meta">{{ ad.user_name || ad.user_email || 'Unknown user' }}</span>
+                    </div>
+                    <div class="activity-end">
+                      <span class="status-badge warning">pending</span>
+                      <span class="activity-date">{{ ad.created_at | date:'shortDate' }}</span>
+                    </div>
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="empty-state-sm">
+                <i class="pi pi-check-circle" style="color: var(--success)"></i>
+                <p>No pending ads</p>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Recent Reports -->
+        <div class="activity-card">
+          <div class="activity-header">
+            <div class="chart-title">
+              <i class="pi pi-flag"></i>
+              <span>Recent Reports</span>
+            </div>
+            <a routerLink="/reports" class="view-all-link">
+              View All <i class="pi pi-arrow-right"></i>
+            </a>
+          </div>
+          <div class="activity-body">
+            @if (recentReports().length) {
+              <div class="activity-list compact">
+                @for (report of recentReports(); track report.id) {
+                  <div class="activity-item">
+                    <div class="activity-avatar report-avatar">
+                      <i [class]="getReportIcon(report.target_type)"></i>
+                    </div>
+                    <div class="activity-info">
+                      <span class="activity-name">{{ report.reason }}</span>
+                      <span class="activity-meta">
+                        <i [class]="getReportIcon(report.target_type)" style="font-size: 0.7rem"></i>
+                        {{ report.target_type }} #{{ report.target_id }}
+                      </span>
+                    </div>
+                    <span class="activity-date">{{ report.created_at | date:'shortDate' }}</span>
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="empty-state-sm">
+                <i class="pi pi-check-circle" style="color: var(--success)"></i>
+                <p>No reports</p>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
     </div>
   }
 </div>

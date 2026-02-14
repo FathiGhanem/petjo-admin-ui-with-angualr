@@ -1,0 +1,342 @@
+<p-toast />
+
+<div class="page-container">
+  <!-- Back button + Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <a routerLink="/pets" class="back-btn">
+        <i class="pi pi-arrow-left"></i>
+      </a>
+      <div>
+        <h1>{{ loading() ? 'Loading...' : pet()?.name }}</h1>
+        <p class="subtitle">Pet Details &amp; Related Information</p>
+      </div>
+    </div>
+    @if (pet()) {
+      <div class="page-actions">
+        <span class="status-badge" [class]="getStatusClass(pet()!.status)">
+          {{ pet()!.status }}
+        </span>
+        <span class="status-badge" [class]="pet()!.visibility === 'public' ? 'info' : 'neutral'">
+          {{ pet()!.visibility }}
+        </span>
+      </div>
+    }
+  </div>
+
+  @if (loading()) {
+    <!-- Skeleton loading -->
+    <div class="detail-grid">
+      <div class="detail-main">
+        <p-card>
+          <div class="skeleton-block">
+            <p-skeleton width="100%" height="300px" borderRadius="12px" />
+            <p-skeleton width="60%" height="24px" styleClass="mt-3" />
+            <p-skeleton width="80%" height="16px" styleClass="mt-2" />
+            <p-skeleton width="40%" height="16px" styleClass="mt-2" />
+          </div>
+        </p-card>
+      </div>
+      <div class="detail-sidebar">
+        <p-card>
+          <p-skeleton width="100%" height="200px" borderRadius="12px" />
+        </p-card>
+      </div>
+    </div>
+  } @else if (error()) {
+    <p-card>
+      <div class="empty-state">
+        <i class="pi pi-exclamation-circle" style="color: #ef4444"></i>
+        <h3>Failed to load pet</h3>
+        <p>{{ error() }}</p>
+        <a routerLink="/pets">
+          <p-button label="Back to Pets" icon="pi pi-arrow-left" severity="primary" />
+        </a>
+      </div>
+    </p-card>
+  } @else if (pet(); as petData) {
+    <div class="detail-grid">
+      <!-- ====== MAIN COLUMN ====== -->
+      <div class="detail-main">
+
+        <!-- Pet Info Card -->
+        <p-card>
+          <div class="section-title">
+            <i class="pi pi-heart"></i>
+            <span>Pet Information</span>
+          </div>
+
+          <div class="pet-hero">
+            @if (petData.main_photo_url) {
+              <p-image [src]="petData.main_photo_url" [alt]="petData.name"
+                       [preview]="true" width="100%" styleClass="pet-hero-image" />
+            } @else {
+              <div class="no-photo-hero">
+                <i class="pi pi-image"></i>
+                <span>No photo available</span>
+              </div>
+            }
+          </div>
+
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Name</span>
+              <span class="info-value">{{ petData.name }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Breed</span>
+              <span class="info-value">{{ petData.breed || '—' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Age</span>
+              <span class="info-value">{{ petData.age != null ? petData.age + ' years' : '—' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Gender</span>
+              <span class="info-value">{{ petData.gender || '—' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Category</span>
+              <span class="info-value">{{ categoryName() || '—' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">City</span>
+              <span class="info-value">{{ cityName() || '—' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Status</span>
+              <span class="status-badge" [class]="getStatusClass(petData.status)">{{ petData.status }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Visibility</span>
+              <span class="status-badge" [class]="petData.visibility === 'public' ? 'info' : 'neutral'">{{ petData.visibility }}</span>
+            </div>
+          </div>
+
+          <!-- Health -->
+          <div class="health-section">
+            <div class="health-badge" [class.active]="petData.vaccinated">
+              <i class="pi" [class.pi-check-circle]="petData.vaccinated" [class.pi-times-circle]="!petData.vaccinated"></i>
+              <span>Vaccinated</span>
+            </div>
+            <div class="health-badge" [class.active]="petData.spayed">
+              <i class="pi" [class.pi-check-circle]="petData.spayed" [class.pi-times-circle]="!petData.spayed"></i>
+              <span>Spayed / Neutered</span>
+            </div>
+          </div>
+
+          @if (petData.description) {
+            <div class="description-section">
+              <span class="info-label">Description</span>
+              <p class="description-text">{{ petData.description }}</p>
+            </div>
+          }
+
+          @if (petData.phone_number) {
+            <div class="contact-section">
+              <i class="pi pi-phone"></i>
+              <span>{{ petData.phone_number }}</span>
+            </div>
+          }
+
+          <div class="dates-section">
+            <div class="date-item">
+              <i class="pi pi-calendar"></i>
+              <span>Created: {{ petData.created_at | date:'medium' }}</span>
+            </div>
+            @if (petData.updated_at) {
+              <div class="date-item">
+                <i class="pi pi-refresh"></i>
+                <span>Updated: {{ petData.updated_at | date:'medium' }}</span>
+              </div>
+            }
+            @if (petData.deleted_at) {
+              <div class="date-item deleted">
+                <i class="pi pi-trash"></i>
+                <span>Deleted: {{ petData.deleted_at | date:'medium' }}</span>
+              </div>
+            }
+          </div>
+        </p-card>
+
+        <!-- Photos Gallery Card -->
+        <p-card>
+          <div class="section-title">
+            <i class="pi pi-images"></i>
+            <span>Photos ({{ photos().length }})</span>
+          </div>
+
+          @if (photos().length > 0) {
+            <div class="photos-grid">
+              @for (photo of photos(); track photo.id) {
+                <div class="photo-item">
+                  <p-image [src]="photo.url" [alt]="petData.name"
+                           [preview]="true" width="100%" styleClass="photo-thumb" />
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="empty-state-sm">
+              <i class="pi pi-image"></i>
+              <p>No additional photos</p>
+            </div>
+          }
+        </p-card>
+
+        <!-- Owner Advertisements -->
+        <p-card>
+          <div class="section-title">
+            <i class="pi pi-megaphone"></i>
+            <span>Owner's Advertisements ({{ ownerAds().length }})</span>
+          </div>
+
+          @if (ownerAds().length > 0) {
+            <p-table [value]="ownerAds()" styleClass="p-datatable-sm"
+                     [paginator]="ownerAds().length > 5" [rows]="5">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Title</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-ad>
+                <tr>
+                  <td>
+                    <div class="ad-title-cell">
+                      <span>{{ ad.title }}</span>
+                      @if (ad.description) {
+                        <small>{{ ad.description | slice:0:80 }}{{ ad.description.length > 80 ? '...' : '' }}</small>
+                      }
+                    </div>
+                  </td>
+                  <td>
+                    <span class="status-badge" [class]="getAdStatusClass(ad.status)">{{ ad.status }}</span>
+                  </td>
+                  <td>{{ ad.created_at | date:'mediumDate' }}</td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="3">
+                    <div class="empty-state-sm">
+                      <i class="pi pi-megaphone"></i>
+                      <p>No advertisements</p>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          } @else {
+            <div class="empty-state-sm">
+              <i class="pi pi-megaphone"></i>
+              <p>This owner has no advertisements</p>
+            </div>
+          }
+        </p-card>
+      </div>
+
+      <!-- ====== SIDEBAR ====== -->
+      <div class="detail-sidebar">
+
+        <!-- Owner Card -->
+        <p-card>
+          <div class="section-title">
+            <i class="pi pi-user"></i>
+            <span>Owner</span>
+          </div>
+
+          @if (owner(); as ownerData) {
+            <div class="owner-card">
+              <div class="owner-avatar">
+                @if (ownerData.avatar_url) {
+                  <img [src]="ownerData.avatar_url" [alt]="ownerData.full_name || ownerData.email" />
+                } @else {
+                  <div class="avatar-placeholder">
+                    <i class="pi pi-user"></i>
+                  </div>
+                }
+              </div>
+              <div class="owner-info">
+                <span class="owner-name">{{ ownerData.full_name || 'No name' }}</span>
+                <span class="owner-email">{{ ownerData.email }}</span>
+                @if (ownerData.phone) {
+                  <span class="owner-phone">
+                    <i class="pi pi-phone"></i> {{ ownerData.phone }}
+                  </span>
+                }
+                @if (ownerData.city) {
+                  <span class="owner-city">
+                    <i class="pi pi-map-marker"></i> {{ ownerData.city }}
+                  </span>
+                }
+              </div>
+              <div class="owner-status">
+                <span class="status-badge" [class]="ownerData.is_active ? 'success' : 'danger'">
+                  {{ ownerData.is_active ? 'Active' : 'Inactive' }}
+                </span>
+              </div>
+              <div class="owner-meta">
+                <small>Member since {{ ownerData.created_at | date:'mediumDate' }}</small>
+              </div>
+            </div>
+          } @else {
+            <div class="empty-state-sm">
+              <i class="pi pi-user"></i>
+              <p>Owner info unavailable</p>
+            </div>
+          }
+        </p-card>
+
+        <!-- Quick Stats Card -->
+        <p-card>
+          <div class="section-title">
+            <i class="pi pi-chart-bar"></i>
+            <span>Quick Stats</span>
+          </div>
+          <div class="quick-stats">
+            <div class="quick-stat">
+              <span class="qs-value">{{ photos().length }}</span>
+              <span class="qs-label">Photos</span>
+            </div>
+            <div class="quick-stat">
+              <span class="qs-value">{{ ownerAds().length }}</span>
+              <span class="qs-label">Owner Ads</span>
+            </div>
+          </div>
+        </p-card>
+
+        <!-- IDs Card -->
+        <p-card>
+          <div class="section-title">
+            <i class="pi pi-key"></i>
+            <span>Identifiers</span>
+          </div>
+          <div class="ids-list">
+            <div class="id-item">
+              <span class="id-label">Pet ID</span>
+              <code class="id-value">{{ petData.id }}</code>
+            </div>
+            <div class="id-item">
+              <span class="id-label">Owner ID</span>
+              <code class="id-value">{{ petData.owner_id }}</code>
+            </div>
+            @if (petData.category_id) {
+              <div class="id-item">
+                <span class="id-label">Category ID</span>
+                <code class="id-value">{{ petData.category_id }}</code>
+              </div>
+            }
+            @if (petData.city_id) {
+              <div class="id-item">
+                <span class="id-label">City ID</span>
+                <code class="id-value">{{ petData.city_id }}</code>
+              </div>
+            }
+          </div>
+        </p-card>
+
+      </div>
+    </div>
+  }
+</div>

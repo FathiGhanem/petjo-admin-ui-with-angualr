@@ -1,0 +1,478 @@
+/* ============================================================
+   Pet Detail – Premium Component Styles
+   ============================================================ */
+
+:host {
+  display: block;
+  animation: fadeIn 0.5s var(--ease-spring);
+}
+
+/* ---------- Header ---------- */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.back-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(var(--primary-rgb), 0.08);
+  color: var(--primary);
+  transition: all 0.3s var(--ease-spring);
+  cursor: pointer;
+  flex-shrink: 0;
+
+  &:hover {
+    background: var(--primary);
+    color: #fff;
+    transform: translateX(-3px);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+  }
+
+  i {
+    font-size: 1.1rem;
+  }
+}
+
+/* ---------- Detail Grid ---------- */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.detail-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.detail-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ---------- Section Title ---------- */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--surface-border);
+
+  i {
+    font-size: 1rem;
+    color: var(--primary);
+  }
+}
+
+/* ---------- Pet Hero Image ---------- */
+.pet-hero {
+  margin-bottom: 1.5rem;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  max-height: 400px;
+
+  ::ng-deep .pet-hero-image img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+  }
+}
+
+.no-photo-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  background: linear-gradient(135deg, var(--surface-hover), var(--surface-ground));
+  border-radius: var(--radius-lg);
+  border: 2px dashed var(--surface-border);
+  gap: 0.75rem;
+  color: var(--text-muted);
+
+  i {
+    font-size: 3rem;
+  }
+
+  span {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+}
+
+/* ---------- Info Grid ---------- */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 0.875rem;
+  background: var(--surface-hover);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--surface-border);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: rgba(var(--primary-rgb), 0.2);
+    background: rgba(var(--primary-rgb), 0.03);
+  }
+}
+
+.info-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.info-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+/* ---------- Health Section ---------- */
+.health-section {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.health-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  transition: all 0.3s ease;
+
+  &.active {
+    background: #ecfdf5;
+    color: #047857;
+    border-color: rgba(16, 185, 129, 0.15);
+  }
+
+  i {
+    font-size: 1.1rem;
+  }
+}
+
+/* ---------- Description ---------- */
+.description-section {
+  margin-bottom: 1.5rem;
+}
+
+.description-text {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text-color-secondary);
+  background: var(--surface-hover);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--primary);
+}
+
+/* ---------- Contact ---------- */
+.contact-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border-radius: var(--radius-md);
+  color: #1e40af;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+
+  i {
+    font-size: 1.1rem;
+  }
+}
+
+/* ---------- Dates ---------- */
+.dates-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.date-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-color-secondary);
+
+  i {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  &.deleted {
+    color: #b91c1c;
+    i { color: #ef4444; }
+  }
+}
+
+/* ---------- Photos Grid ---------- */
+.photos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.75rem;
+}
+
+.photo-item {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  aspect-ratio: 1;
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--surface-card), var(--surface-card)) padding-box,
+    var(--primary-gradient) border-box;
+  transition: all 0.3s var(--ease-spring);
+
+  &:hover {
+    transform: scale(1.03);
+    box-shadow: var(--shadow-md);
+  }
+
+  ::ng-deep .photo-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* ---------- Owner Card ---------- */
+.owner-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+}
+
+.owner-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid transparent;
+  background:
+    linear-gradient(var(--surface-card), var(--surface-card)) padding-box,
+    var(--primary-gradient) border-box;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--surface-hover), var(--surface-ground));
+
+  i {
+    font-size: 2rem;
+    color: var(--text-muted);
+  }
+}
+
+.owner-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.owner-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.owner-email {
+  font-size: 0.85rem;
+  color: var(--text-color-secondary);
+}
+
+.owner-phone,
+.owner-city {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+
+  i { font-size: 0.8rem; }
+}
+
+.owner-status {
+  margin-top: 0.25rem;
+}
+
+.owner-meta {
+  margin-top: 0.25rem;
+  small {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+}
+
+/* ---------- Quick Stats ---------- */
+.quick-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.quick-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background: var(--surface-hover);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--surface-border);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: rgba(var(--primary-rgb), 0.2);
+    background: rgba(var(--primary-rgb), 0.04);
+  }
+}
+
+.qs-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-color);
+  line-height: 1;
+}
+
+.qs-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  margin-top: 0.375rem;
+}
+
+/* ---------- IDs List ---------- */
+.ids-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.id-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.id-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+}
+
+.id-value {
+  font-size: 0.75rem;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  background: var(--surface-hover);
+  padding: 0.375rem 0.625rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--surface-border);
+  color: var(--text-color-secondary);
+  word-break: break-all;
+  user-select: all;
+}
+
+/* ---------- Ad Title Cell ---------- */
+.ad-title-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  span {
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  small {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+}
+
+/* ---------- Empty States ---------- */
+.empty-state-sm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-muted);
+
+  i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.5;
+  }
+
+  p {
+    font-size: 0.85rem;
+    margin: 0;
+  }
+}
+
+/* ---------- Skeleton ---------- */
+.skeleton-block {
+  display: flex;
+  flex-direction: column;
+}
