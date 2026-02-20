@@ -15,7 +15,6 @@ import {
   City,
   CityCreate,
   Hero,
-  HeroCreate,
   Report,
   SystemStats
 } from '../models';
@@ -182,11 +181,11 @@ export class ApiService {
     return this.http.get<ApiResponse<Hero>>(`${this.api}/admin/heroes/${id}`);
   }
 
-  createHero(data: HeroCreate): Observable<ApiResponse<Hero>> {
+  createHero(data: FormData): Observable<ApiResponse<Hero>> {
     return this.http.post<ApiResponse<Hero>>(`${this.api}/admin/heroes`, data);
   }
 
-  updateHero(id: number, data: Partial<HeroCreate>): Observable<ApiResponse<Hero>> {
+  updateHero(id: number, data: FormData): Observable<ApiResponse<Hero>> {
     return this.http.patch<ApiResponse<Hero>>(`${this.api}/admin/heroes/${id}`, data);
   }
 

@@ -46,16 +46,6 @@
                 <span>No image</span>
               </div>
             }
-            <div class="hero-overlay">
-              <button pButton icon="pi pi-pencil" severity="info"
-                      [rounded]="true" size="small"
-                      pTooltip="Edit" tooltipPosition="top"
-                      (click)="openEditDialog(hero)"></button>
-              <button pButton icon="pi pi-trash" severity="danger"
-                      [rounded]="true" size="small"
-                      pTooltip="Delete" tooltipPosition="top"
-                      (click)="confirmDelete(hero)"></button>
-            </div>
           </div>
           <div class="hero-info">
             <div class="hero-meta">
@@ -70,6 +60,14 @@
             } @else {
               <span class="no-link">No link</span>
             }
+            <div class="hero-actions">
+              <p-button icon="pi pi-pencil" severity="info" [outlined]="true"
+                        size="small" pTooltip="Edit" tooltipPosition="top"
+                        (onClick)="openEditDialog(hero)" />
+              <p-button icon="pi pi-trash" severity="danger" [outlined]="true"
+                        size="small" pTooltip="Delete" tooltipPosition="top"
+                        (onClick)="confirmDelete(hero)" />
+            </div>
           </div>
         </div>
       }
@@ -79,28 +77,84 @@
 
 <!-- Create/Edit Dialog -->
 <p-dialog [header]="editingHero() ? 'Edit Hero' : 'New Hero'"
-          [(visible)]="dialogVisible" [modal]="true" [style]="{ width: '500px' }">
+          [(visible)]="dialogVisible" [modal]="true" [style]="{ width: '540px' }"
+          [closable]="!saving()">
+
+  <!-- Upload zone -->
   <div class="form-field">
-    <label>Image Path / URL *</label>
-    <input pInputText [(ngModel)]="formImgPath" placeholder="https://... or /assets/hero.jpg"
-           class="w-full" />
+    <label>Hero Image {{ editingHero() ? '(leave empty to keep current)' : '*' }}</label>
+
+    @if (!selectedFile && !imagePreview) {
+      <!-- Dropzone -->
+      <div class="upload-zone" [class.drag-over]="dragOver"
+           (dragover)="onDragOver($event)"
+           (dragleave)="onDragLeave($event)"
+           (drop)="onDrop($event)"
+           (click)="fileInput.click()">
+        <input #fileInput type="file" hidden
+               accept="image/jpeg,image/png,image/webp,image/heic"
+               (change)="onFileSelected($event)" />
+        <i class="pi pi-cloud-upload"></i>
+        <span class="upload-title">Drop image here or click to browse</span>
+        <span class="upload-hint">JPEG, PNG, WebP or HEIC — Max 10 MB</span>
+      </div>
+    } @else {
+      <!-- Preview card -->
+      <div class="preview-card">
+        <div class="preview-image">
+          <img [src]="imagePreview" alt="Preview" />
+        </div>
+        <div class="preview-info">
+          @if (selectedFile) {
+            <span class="file-name">{{ selectedFile.name }}</span>
+            <span class="file-size">{{ formatFileSize(selectedFile.size) }}</span>
+          } @else {
+            <span class="file-name">Current image</span>
+            <span class="file-size">Stored in bucket</span>
+          }
+        </div>
+        <div class="preview-actions">
+          <button pButton icon="pi pi-refresh" severity="secondary"
+                  [rounded]="true" size="small" [text]="true"
+                  pTooltip="Change image" tooltipPosition="top"
+                  (click)="fileInput2.click()" [disabled]="saving()"></button>
+          @if (selectedFile) {
+            <button pButton icon="pi pi-times" severity="danger"
+                    [rounded]="true" size="small" [text]="true"
+                    pTooltip="Remove" tooltipPosition="top"
+                    (click)="removeSelectedFile()" [disabled]="saving()"></button>
+          }
+          <input #fileInput2 type="file" hidden
+                 accept="image/jpeg,image/png,image/webp,image/heic"
+                 (change)="onFileSelected($event)" />
+        </div>
+      </div>
+    }
+
+    @if (fileError) {
+      <small class="file-error"><i class="pi pi-exclamation-circle"></i> {{ fileError }}</small>
+    }
   </div>
+
+  <!-- Link field -->
   <div class="form-field">
     <label>Link (optional)</label>
     <input pInputText [(ngModel)]="formLink" placeholder="https://..."
-           class="w-full" />
+           class="w-full" [disabled]="saving()" />
   </div>
-  @if (formImgPath) {
-    <div class="dialog-preview">
-      <label>Preview</label>
-      <img [src]="formImgPath" alt="Preview" />
-    </div>
+
+  <!-- Saving progress -->
+  @if (saving()) {
+    <p-progressBar mode="indeterminate" [style]="{ height: '4px', 'margin-top': '0.5rem' }" />
   }
+
   <ng-template pTemplate="footer">
     <p-button label="Cancel" severity="secondary" [text]="true"
-              (onClick)="dialogVisible = false" />
-    <p-button [label]="editingHero() ? 'Update' : 'Create'" icon="pi pi-check"
-              severity="primary" [disabled]="!formImgPath.trim()"
+              (onClick)="dialogVisible = false" [disabled]="saving()" />
+    <p-button [label]="saving() ? 'Uploading...' : (editingHero() ? 'Update' : 'Create')"
+              [icon]="saving() ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+              severity="primary"
+              [disabled]="saving() || (!editingHero() && !selectedFile)"
               (onClick)="save()" />
   </ng-template>
 </p-dialog>
